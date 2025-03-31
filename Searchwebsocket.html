@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-Time Search Results</title>
+  <style>
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+    .suggestions {
+      border: 1px solid #ccc;
+      border-top: none;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-top: 20px;
+      list-style-type: none;
+      padding: 0;
+    }
+    .suggestions li {
+      padding: 10px;
+      cursor: pointer;
+    }
+    .suggestions li:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Real-Time Search Results</h2>
+  <ul id="suggestionsList" class="suggestions"></ul>
+</div>
+
+<script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+<script>
+  // Initialize WebSocket connection
+  const socket = io('ws://pinkapple-reports-printing-8964e6404c0e.herokuapp.com'); // Replace with your server's URL if different
+
+  // Reference to the suggestions list element
+  const suggestionsList = document.getElementById('suggestionsList');
+
+  // Listen for 'searchResults' event from the server and update suggestions
+  socket.on('searchResults', (results) => {
+    updateSuggestions(results); // Update UI with received results
+  });
+
+  // Function to display suggestions in real-time
+  function updateSuggestions(results) {
+    suggestionsList.innerHTML = ''; // Clear existing suggestions
+
+    // Create list items for each result
+    results.forEach(result => {
+      const listItem = document.createElement('li');
+      listItem.textContent = `${result.AccountName} - ${result.AccountNumber} - ${result.SavingsRunningBalance}`;
+      suggestionsList.appendChild(listItem);
+    });
+  }
+</script>
+
+</body>
+</html>

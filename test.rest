@@ -1,0 +1,270 @@
+### Test homepage
+GET http://localhost:3000/
+
+### Test sending notification to a connected subscriber
+POST http://localhost:3000/push-notification
+Content-Type: application/json
+
+{
+  "phone": "1234567890",
+  "data": "Dear Edie TESTING COMPANY BRANCH END OF DAY REPORT on 23/09/2024:No.OfActiveLoans: 675;No.OfCustomersPaid: 317;CollectionRate: 47%;NewCustomers: 3;TotalCollections: 7,579,400;No.OfRenewedPaid: 19;TotalAmntRenewedPaid: 342,000;No.OfLoansDisbursed: 23;TotalAmntDisbursed: 6,550,000;No.OfLoansRenewed: 7;TotalAmntRenewed: 1,967,500;PrincipalBalance: 130,713,014;InterestBalance: 21,684,657;TotalLoanPortfolio: 152,397,671;No.OfSavingAdded: 11;No.OfSavingRemoved: 9;OpeningCash: 825,800;PrincipalCollected: 6,368,355;InterestCollected: 1,211,045;ProcessingFees: 335,000;LedgerFees: 30,000;UnrealisedInterestIncome: 207,628;SavingsAndDeposits: 129,200;BankDeposits: 1,189,000;TotalExpenses: 135,000;LoanDisbursements: 6,550,000;SavingsWithdraws: 216,200;ClosingCash: 809,200;"
+}
+
+### Test sending notification to a connected subscriber
+POST  https://pinkapple-reports-834b63200c6b.herokuapp.com/push-notification
+Content-Type: application/json
+
+{
+  "phone": "1234567890",
+  "data": "Dear Edie TESTING COMPANY BRANCH END OF DAY REPORT on 23/09/2024:No.OfActiveLoans: 675;No.OfCustomersPaid: 317;CollectionRate: 47%;NewCustomers: 3;TotalCollections: 7,579,400;No.OfRenewedPaid: 19;TotalAmntRenewedPaid: 342,000;No.OfLoansDisbursed: 23;TotalAmntDisbursed: 6,550,000;No.OfLoansRenewed: 7;TotalAmntRenewed: 1,967,500;PrincipalBalance: 130,713,014;InterestBalance: 21,684,657;TotalLoanPortfolio: 152,397,671;No.OfSavingAdded: 11;No.OfSavingRemoved: 9;OpeningCash: 825,800;PrincipalCollected: 6,368,355;InterestCollected: 1,211,045;ProcessingFees: 335,000;LedgerFees: 30,000;UnrealisedInterestIncome: 207,628;SavingsAndDeposits: 129,200;BankDeposits: 1,189,000;TotalExpenses: 135,000;LoanDisbursements: 6,550,000;SavingsWithdraws: 216,200;ClosingCash: 809,200;"
+}
+
+
+### Test sending notification to a disconnected subscriber (message will be queued)
+POST http://localhost:3000/push-notification
+Content-Type: application/json
+
+{
+  "phone": "0987654321",
+  "data": "Please review your latest updates."
+}
+
+
+### Save Transaction
+POST http://localhost:3060/save-savings-transactions
+Content-Type: application/json
+
+{
+     "TrnId": "1",
+     "TrnDate": "2024-10-19",
+     "AccountNumber": "05502002410",
+     "AccountName": "YENOSU WASSWA",
+     "SavingsMonth": "OCTOBER",
+     "SavingsYear": "2024",
+     "SavingsAdded": "800000.0",
+     "SavingsRemoved": "-",
+     "SavingsRunningBalance": "800000.0",
+     "OtherOne": "Regular Savings for YENOSU WASSWA's Savings Processed on 19/10/2024",
+     "OtherTwo": "NA",
+     "OtherThree": "NA",
+     "OtherFour": "NA",
+     "OtherFive": "NA"
+}
+
+
+### Get Transaction by TrnId
+GET http://localhost:3000/get-transaction?TrnId=YOUR_TRN_ID_HERE
+Content-Type: application/json
+
+
+
+
+### Get Transaction by TrnId
+GET http://localhost:3060/get-all-savings-transaction
+Content-Type: application/json
+
+
+
+### Get Transaction by TrnId
+GET https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/get-all-savings-transaction
+Content-Type: application/json
+
+
+
+
+
+
+
+### Get Paginated Transaction Data with Search
+GET http://localhost:3060/get-all-savings-transaction-search?term=Natamba&page=1&pageSize=1000
+Content-Type: application/json
+
+
+### Get Paginated Transaction Data with Search
+GET https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/get-all-savings-transaction-search?term=Natamba&page=1&pageSize=1000
+Content-Type: application/json
+
+### Search Savings Transaction
+GET http://localhost:3060/search-savings-transaction?term=Naha
+Content-Type: application/json
+
+
+### Get Transaction by TrnId
+GET https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/search-savings-transaction?term=Naha
+Content-Type: application/json
+
+
+
+### Create Saving Transaction
+POST http://localhost:3060/create-saving
+Content-Type: application/json
+
+{
+  "TrnId": "8617",
+  "amountSaved": 200000
+}
+
+
+
+
+### Create Saving Transaction
+POST https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/create-saving
+Content-Type: application/json
+
+{
+  "TrnId": "8617",
+  "amountSaved": 200000
+}
+
+
+### Get unreconciled savings
+GET http://localhost:3060/savings/unreconciled
+Content-Type: application/json
+
+
+### Get unreconciled savings
+GET https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/savings/unreconciled
+Content-Type: application/json
+
+
+### Get all savings records
+GET http://localhost:3060/savings/all
+Content-Type: application/json
+
+
+### Get all savings records
+GET https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/savings/all
+Content-Type: application/json
+
+
+### Reconcile savings records
+POST http://localhost:3060/savings/reconcile
+Content-Type: application/json
+
+{
+  "id": [12, 14,16] 
+
+}
+
+
+### Reconcile savings records
+POST https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/savings/reconcile
+Content-Type: application/json
+
+
+{
+  "id": [12, 14,16] 
+
+}
+
+
+### Get all loan transactions
+GET http://localhost:3060/get-all-loan-transactions
+Content-Type: application/json
+
+
+### Get all loan transactions
+GET https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/get-all-loan-transactions
+Content-Type: application/json
+
+
+
+### Get loan transactions with search and pagination
+GET http://localhost:3060/get-all-loan-transactions-search?term=Puddy&page=1&pageSize=10
+Content-Type: application/json
+
+### Get loan transactions with search and pagination
+GET https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/get-all-loan-transactions-search?term=Puddy&page=1&pageSize=10
+Content-Type: application/json
+
+
+### Search loan transactions
+GET http://localhost:3060/search-loan-transaction?term=Junda
+Content-Type: application/json
+
+
+
+### Search loan transactions
+GET https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/search-loan-transaction?term=Junda
+Content-Type: application/json
+
+
+### Create loan payment
+POST http://localhost:3060/create-loan-payment
+Content-Type: application/json
+
+{
+  "loan_id": "newloan05502015910",  
+  "amountPaid": 10000000.00  
+}
+
+
+### Create loan payment
+POST https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/create-loan-payment
+Content-Type: application/json
+
+{
+  "loan_id": "newloan05502015910",  
+  "amountPaid": 10000000.00  
+}
+
+
+### Get unreconciled loan payments
+GET http://localhost:3060/loans/unreconciled
+Content-Type: application/json
+
+
+### Get unreconciled loan payments
+GET https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/loans/unreconciled
+Content-Type: application/json
+
+
+
+### Get all loan payments
+GET http://localhost:3060/loans/all
+Content-Type: application/json
+
+
+### Get all loan payments
+GET https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/loans/all
+Content-Type: application/json
+
+
+### Reconcile loan payments
+POST http://localhost:3060/loans/reconcile
+Content-Type: application/json
+
+{
+  "id": [1, 2, 3]  
+}
+
+
+### Reconcile loan payments
+POST https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/loans/reconcile
+Content-Type: application/json
+
+{
+  "id": [1, 2, 3]  
+}
+
+
+
+### Login Request
+POST http://localhost:3060/login
+Content-Type: application/json
+
+{
+  "user_id": "10000",  
+  "p_word_login": "aa" 
+}
+
+
+
+### Login Request
+POST https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/login
+Content-Type: application/json
+
+{
+  "user_id": "10000",  
+  "p_word_login": "aa" 
+}

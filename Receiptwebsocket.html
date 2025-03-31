@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt Viewer</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .receipt-details {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+        }
+        .detail {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Receipt Details</h2>
+    <div id="receiptDetails" class="receipt-details"></div>
+</div>
+
+<script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+<script>
+    // Initialize WebSocket connection
+    const socket = io('ws://pinkapple-reports-printing-8964e6404c0e.herokuapp.com'); // Change this to your WebSocket server URL
+
+    // Reference to the receipt details element
+    const receiptDetails = document.getElementById('receiptDetails');
+
+    // Listen for 'receiptData' event from the server and update the receipt details
+    socket.on('receiptData', (data) => {
+        updateReceiptDetails(data); // Update UI with received receipt data
+    });
+
+    // Function to display receipt details
+    function updateReceiptDetails(data) {
+        receiptDetails.innerHTML = ''; // Clear existing receipt details
+
+        // Display each detail from the receipt data
+        const details = [
+            { label: 'Company Name', value: data.theCompanyName },
+            { label: 'Branch', value: data.theCompanyBranch },
+            { label: 'PO Box', value: data.theCompanyBoxNumber },
+            { label: 'Account Name', value: data.AccountName },
+            { label: 'Savings Paid', value: `$${data.SavingsPaid}` },
+            { label: 'Running Balance', value: `$${data.SavingsRunningBalance}` },
+            { label: 'Date', value: data.Date }
+        ];
+
+        // Create divs for each detail
+        details.forEach(detail => {
+            const detailDiv = document.createElement('div');
+            detailDiv.classList.add('detail');
+            detailDiv.textContent = `${detail.label}: ${detail.value}`;
+            receiptDetails.appendChild(detailDiv);
+        });
+    }
+</script>
+
+</body>
+</html>
