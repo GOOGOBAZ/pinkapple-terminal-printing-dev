@@ -35,71 +35,99 @@ app.get('/', (req, res) => {
 });
 
 // // New endpoint to save transaction data
-// app.post('/save-savings-transactions', async (req, res) => {
-//   console.log("Received request at /save-savings-transactions");
-//   const {
-//     TrnId, TrnDate, AccountNumber, AccountName, SavingsMonth, SavingsYear, SavingsAdded,
-//     SavingsRemoved, SavingsRunningBalance, OtherOne, OtherTwo, OtherThree, OtherFour, OtherFive
-//   } = req.body;
+app.post('/save-savings-transactions_dev', async (req, res) => {
+  console.log("Received request at /save-savings-transactions");
 
-//   try {
-//     // Insert the transaction record into the database
-//     const insertQuery = `
-//       INSERT INTO transactions (
-//         TrnId, TrnDate, AccountNumber, AccountName, SavingsMonth, SavingsYear, 
-//         SavingsAdded, SavingsRemoved, SavingsRunningBalance, OtherOne, OtherTwo, 
-//         OtherThree, OtherFour, OtherFive, created_at
-//       ) 
-//       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, UTC_TIMESTAMP())
-//     `;
-    
-//     await connect.query(insertQuery, [
-//       TrnId, TrnDate, AccountNumber, AccountName, SavingsMonth, SavingsYear,
-//       SavingsAdded, SavingsRemoved, SavingsRunningBalance, OtherOne, OtherTwo,
-//       OtherThree, OtherFour, OtherFive
-//     ]);
+  const {
+    TrnDate,
+    AccountNumber,
+    AccountName,
+    SavingsMonth,
+    SavingsYear,
+    SavingsAdded,
+    SavingsRemoved,
+    SavingsRunningBalance,
+    OtherOne,
+    OtherTwo,
+    OtherThree,
+    OtherFour,
+    OtherFive,
+    company_name,
+    branch_name,
+    user_id
+  } = req.body;
 
-//     // Respond with a success message
-//     res.status(200).json({ message: 'Transaction data saved successfully.' });
-//   } catch (error) {
-//     console.error('Error saving transaction data:', error);
-//     res.status(500).json({ message: 'Server error while saving transaction data.' });
-//   }
-// });
+  // INSERT or UPDATE based on the unique index:
+  // (AccountNumber, SavingsMonth, SavingsYear, company_name, branch_name)
+  const upsertQuery = `
+    INSERT INTO transactions_dev (
+      TrnDate,
+      AccountNumber,
+      AccountName,
+      SavingsMonth,
+      SavingsYear,
+      SavingsAdded,
+      SavingsRemoved,
+      SavingsRunningBalance,
+      OtherOne,
+      OtherTwo,
+      OtherThree,
+      OtherFour,
+      OtherFive,
+      company_name,
+      branch_name,
+      user_id,
+      created_at
+    )
+    VALUES (
+      ?, ?, ?, ?, ?,
+      ?, ?, ?, ?, ?,
+      ?, ?, ?, ?, ?,
+      ?, UTC_TIMESTAMP()
+    )
+    ON DUPLICATE KEY UPDATE
+      TrnDate = VALUES(TrnDate),
+      AccountName = VALUES(AccountName),
+      SavingsAdded = VALUES(SavingsAdded),
+      SavingsRemoved = VALUES(SavingsRemoved),
+      SavingsRunningBalance = VALUES(SavingsRunningBalance),
+      OtherOne = VALUES(OtherOne),
+      OtherTwo = VALUES(OtherTwo),
+      OtherThree = VALUES(OtherThree),
+      OtherFour = VALUES(OtherFour),
+      OtherFive = VALUES(OtherFive),
+      user_id = VALUES(user_id),           -- can be updated
+      company_name = VALUES(company_name), -- optional, though typically wouldn't change
+      branch_name = VALUES(branch_name);   -- optional, though typically wouldn't change
+  `;
 
-// app.post('/save-savings-transactions', async (req, res) => {
-//   console.log("Received request at /save-savings-transactions");
-//   const {
-//     TrnId, TrnDate, AccountNumber, AccountName, SavingsMonth, SavingsYear, SavingsAdded,
-//     SavingsRemoved, SavingsRunningBalance, OtherOne, OtherTwo, OtherThree, OtherFour, OtherFive
-//   } = req.body;
+  try {
+    await connect.query(upsertQuery, [
+      TrnDate,
+      AccountNumber,
+      AccountName,
+      SavingsMonth,
+      SavingsYear,
+      SavingsAdded,
+      SavingsRemoved,
+      SavingsRunningBalance,
+      OtherOne,
+      OtherTwo,
+      OtherThree,
+      OtherFour,
+      OtherFive,
+      company_name,
+      branch_name,
+      user_id
+    ]);
 
-//   const upsertQuery = `
-//     INSERT INTO transactions (
-//       TrnId, TrnDate, AccountNumber, AccountName, SavingsMonth, SavingsYear, 
-//       SavingsAdded, SavingsRemoved, SavingsRunningBalance, OtherOne, OtherTwo, 
-//       OtherThree, OtherFour, OtherFive, created_at
-//     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, UTC_TIMESTAMP())
-//     ON DUPLICATE KEY UPDATE 
-//       TrnDate=VALUES(TrnDate), AccountNumber=VALUES(AccountNumber), AccountName=VALUES(AccountName),
-//       SavingsMonth=VALUES(SavingsMonth), SavingsYear=VALUES(SavingsYear), SavingsAdded=VALUES(SavingsAdded),
-//       SavingsRemoved=VALUES(SavingsRemoved), SavingsRunningBalance=VALUES(SavingsRunningBalance),
-//       OtherOne=VALUES(OtherOne), OtherTwo=VALUES(OtherTwo), OtherThree=VALUES(OtherThree),
-//       OtherFour=VALUES(OtherFour), OtherFive=VALUES(OtherFive);
-//   `;
+    res.status(200).json({ message: 'Transaction data saved/updated successfully (by company_name & branch_name).' });
+  } catch (error) {
+    console.error('Error saving or updating transaction data:', error);
+    res.status(500).json({ message: 'Server error while saving or updating transaction data.' });
+  }
+});
 
-//   try {
-//     await connect.query(upsertQuery, [
-//       TrnId, TrnDate, AccountNumber, AccountName, SavingsMonth, SavingsYear,
-//       SavingsAdded, SavingsRemoved, SavingsRunningBalance, OtherOne, OtherTwo,
-//       OtherThree, OtherFour, OtherFive
-//     ]);
-//     res.status(200).json({ message: 'Transaction data saved or updated successfully.' });
-//   } catch (error) {
-//     console.error('Error saving or updating transaction data:', error);
-//     res.status(500).json({ message: 'Server error while saving or updating transaction data.' });
-//   }
-// });
 
 app.post('/save-savings-transactions', async (req, res) => {
   console.log("Received request at /save-savings-transactions");

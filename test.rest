@@ -29,6 +29,30 @@ Content-Type: application/json
   "data": "Please review your latest updates."
 }
 
+### Save or Update Transaction (by company_name & branch_name)
+POST http://localhost:3000/save-savings-transactions_dev
+Content-Type: application/json
+
+{
+  "TrnDate": "2024-10-19",
+  "AccountNumber": "05502002410",
+  "AccountName": "YENOSU WASSWA",
+  "SavingsMonth": "OCTOBER",
+  "SavingsYear": "2024",
+  "SavingsAdded": "8900000.0",
+  "SavingsRemoved": "0.00",
+  "SavingsRunningBalance": "8900000.0",
+  "OtherOne": "Regular Savings for YENOSU WASSWA's Savings on 19/10/2024",
+  "OtherTwo": "NA",
+  "OtherThree": "NA",
+  "OtherFour": "NA",
+  "OtherFive": "NA",
+  "company_name": "My Company",
+  "branch_name": "Main Branch",
+  "user_id": 101
+}
+
+
 
 ### Save Transaction
 POST http://localhost:3060/save-savings-transactions
