@@ -35,11 +35,11 @@ Content-Type: application/json
 
 {
   "TrnDate": "2024-10-19",
-  "AccountNumber": "05502002410",
+  "AccountNumber": "05502002910",
   "AccountName": "YENOSU WASSWA",
   "SavingsMonth": "OCTOBER",
   "SavingsYear": "2024",
-  "SavingsAdded": "8900000.0",
+  "SavingsAdded": "8990000.0",
   "SavingsRemoved": "0.00",
   "SavingsRunningBalance": "8900000.0",
   "OtherOne": "Regular Savings for YENOSU WASSWA's Savings on 19/10/2024",
@@ -47,8 +47,8 @@ Content-Type: application/json
   "OtherThree": "NA",
   "OtherFour": "NA",
   "OtherFive": "NA",
-  "company_name": "My Company",
-  "branch_name": "Main Branch",
+  "company_name": "My Company1",
+  "branch_name": "Main BranchY",
   "user_id": 101
 }
 

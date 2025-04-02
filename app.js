@@ -164,49 +164,7 @@ app.post('/save-savings-transactions', async (req, res) => {
 });
 
 
-// // New endpoint to save loan portfolio data
-// app.post('/save-loan-portfolio', async (req, res) => {
-//   console.log("Received request at /save-loan-portfolio");
-
-//   const {
-//     loan_id, customer_name, customer_contact, guarantor1_name, guarantor1_contact,
-//     guarantor2_name, guarantor2_contact, date_taken, due_date, loan_taken,
-//     principal_remaining, interest_remaining, total_remaining, total_inarrears,
-//     number_of_days_in_arrears, loan_status
-//   } = req.body;
-
-//   console.log(`loan_id: ${loan_id}, customer_name: ${customer_name}, customer_contact: ${customer_contact},
-//     guarantor1_name: ${guarantor1_name}, guarantor1_contact: ${guarantor1_contact},
-//     guarantor2_name: ${guarantor2_name}, guarantor2_contact: ${guarantor2_contact},
-//     date_taken: ${date_taken}, due_date: ${due_date}, loan_taken: ${loan_taken},
-//     principal_remaining: ${principal_remaining}, interest_remaining: ${interest_remaining},
-//     total_remaining: ${total_remaining}, total_inarrears: ${total_inarrears},
-//     number_of_days_in_arrears: ${number_of_days_in_arrears}, loan_status: ${loan_status}`);
-
-//   const insertQuery = `
-    // INSERT INTO loan_portfolio (
-    //   loan_id, customer_name, customer_contact, guarantor1_name, guarantor1_contact,
-    //   guarantor2_name, guarantor2_contact, date_taken, due_date, loan_taken,
-    //   principal_remaining, interest_remaining, total_remaining, total_inarrears,
-    //   number_of_days_in_arrears, loan_status
-    // )
-    // VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-//   `;
-
-//   try {
-//     const [result] = await connect.query(insertQuery, [
-//       loan_id, customer_name, customer_contact, guarantor1_name, guarantor1_contact,
-//       guarantor2_name, guarantor2_contact, date_taken, due_date, loan_taken,
-//       principal_remaining, interest_remaining, total_remaining, total_inarrears,
-//       number_of_days_in_arrears, loan_status
-//     ]);
-
-//     res.status(200).json({ message: 'Loan portfolio data saved successfully.' });
-//   } catch (error) {
-//     console.error('Error saving loan portfolio data:', error);
-//     res.status(500).json({ message: 'Server error while saving loan portfolio data.' });
-//   }
-// });
+// New endpoint to save loan portfolio data
 app.post('/save-loan-portfolio', async (req, res) => {
   console.log("Received request at /save-loan-portfolio");
 
@@ -245,6 +203,131 @@ app.post('/save-loan-portfolio', async (req, res) => {
   } catch (error) {
     console.error('Error saving or updating loan portfolio data:', error);
     res.status(500).json({ message: 'Server error while saving or updating loan portfolio data.' });
+  }
+});
+
+
+// New endpoint to save loan portfolio data (loan_portfolio_dev)
+app.post('/save-loan-portfolio-dev', async (req, res) => {
+  console.log("Received request at /save-loan-portfolio-dev");
+
+  // Destructure incoming payload
+  const {
+    loan_id,
+    customer_name,
+    customer_contact,
+    guarantor1_name,
+    guarantor1_contact,
+    guarantor2_name,
+    guarantor2_contact,
+    date_taken,
+    due_date,
+    loan_taken,
+    principal_remaining,
+    interest_remaining,
+    total_remaining,
+    total_inarrears,
+    number_of_days_in_arrears,
+    loan_status,
+    company_name,
+    branch_name,
+    user_id
+  } = req.body;
+
+  // Upsert query
+  const upsertQuery = `
+    INSERT INTO loan_portfolio_dev (
+      loan_id,
+      customer_name,
+      customer_contact,
+      guarantor1_name,
+      guarantor1_contact,
+      guarantor2_name,
+      guarantor2_contact,
+      date_taken,
+      due_date,
+      loan_taken,
+      principal_remaining,
+      interest_remaining,
+      total_remaining,
+      total_inarrears,
+      number_of_days_in_arrears,
+      loan_status,
+      company_name,
+      branch_name,
+      user_id
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ON DUPLICATE KEY UPDATE
+      customer_name = VALUES(customer_name),
+      customer_contact = VALUES(customer_contact),
+      guarantor1_name = VALUES(guarantor1_name),
+      guarantor1_contact = VALUES(guarantor1_contact),
+      guarantor2_name = VALUES(guarantor2_name),
+      guarantor2_contact = VALUES(guarantor2_contact),
+      date_taken = VALUES(date_taken),
+      due_date = VALUES(due_date),
+      loan_taken = VALUES(loan_taken),
+      principal_remaining = VALUES(principal_remaining),
+      interest_remaining = VALUES(interest_remaining),
+      total_remaining = VALUES(total_remaining),
+      total_inarrears = VALUES(total_inarrears),
+      number_of_days_in_arrears = VALUES(number_of_days_in_arrears),
+      loan_status = VALUES(loan_status),
+      user_id = VALUES(user_id);
+  `;
+
+  try {
+    // Start the transaction
+    await connect.beginTransaction();
+
+    // Perform the upsert
+    await connect.query(upsertQuery, [
+      loan_id,
+      customer_name,
+      customer_contact,
+      guarantor1_name,
+      guarantor1_contact,
+      guarantor2_name,
+      guarantor2_contact,
+      date_taken,
+      due_date,
+      loan_taken,
+      principal_remaining,
+      interest_remaining,
+      total_remaining,
+      total_inarrears,
+      number_of_days_in_arrears,
+      loan_status,
+      company_name,
+      branch_name,
+      user_id
+    ]);
+
+    // Retrieve the freshly inserted or updated record
+    const [rows] = await connect.query(`
+      SELECT * 
+      FROM loan_portfolio_dev 
+      WHERE loan_id = ? 
+        AND company_name = ?
+        AND branch_name = ?
+    `, [loan_id, company_name, branch_name]);
+
+    // Commit the transaction
+    await connect.commit();
+
+    // Return the updated/inserted data to the client
+    res.status(200).json({
+      message: 'Loan portfolio data saved or updated successfully.',
+      data: rows.length ? rows[0] : {}
+    });
+  } catch (error) {
+    // Roll back on any error
+    await connect.rollback();
+    console.error('Error saving or updating loan portfolio data:', error);
+    res.status(500).json({
+      message: 'Server error while saving or updating loan portfolio data.'
+    });
   }
 });
 

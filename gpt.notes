@@ -1,0 +1,71 @@
+adjust this route handler "
+// New endpoint to save loan portfolio data
+app.post('/save-loan-portfolio', async (req, res) => {
+  console.log("Received request at /save-loan-portfolio");
+
+  const {
+    loan_id, customer_name, customer_contact, guarantor1_name, guarantor1_contact,
+    guarantor2_name, guarantor2_contact, date_taken, due_date, loan_taken,
+    principal_remaining, interest_remaining, total_remaining, total_inarrears,
+    number_of_days_in_arrears, loan_status
+  } = req.body;
+
+  const upsertQuery = `
+    INSERT INTO loan_portfolio (
+      loan_id, customer_name, customer_contact, guarantor1_name, guarantor1_contact,
+      guarantor2_name, guarantor2_contact, date_taken, due_date, loan_taken,
+      principal_remaining, interest_remaining, total_remaining, total_inarrears,
+      number_of_days_in_arrears, loan_status
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ON DUPLICATE KEY UPDATE 
+      customer_name=VALUES(customer_name), customer_contact=VALUES(customer_contact),
+      guarantor1_name=VALUES(guarantor1_name), guarantor1_contact=VALUES(guarantor1_contact),
+      guarantor2_name=VALUES(guarantor2_name), guarantor2_contact=VALUES(guarantor2_contact),
+      date_taken=VALUES(date_taken), due_date=VALUES(due_date), loan_taken=VALUES(loan_taken),
+      principal_remaining=VALUES(principal_remaining), interest_remaining=VALUES(interest_remaining),
+      total_remaining=VALUES(total_remaining), total_inarrears=VALUES(total_inarrears),
+      number_of_days_in_arrears=VALUES(number_of_days_in_arrears), loan_status=VALUES(loan_status);
+  `;
+
+  try {
+    await connect.query(upsertQuery, [
+      loan_id, customer_name, customer_contact, guarantor1_name, guarantor1_contact,
+      guarantor2_name, guarantor2_contact, date_taken, due_date, loan_taken,
+      principal_remaining, interest_remaining, total_remaining, total_inarrears,
+      number_of_days_in_arrears, loan_status
+    ]);
+    res.status(200).json({ message: 'Loan portfolio data saved or updated successfully.' });
+  } catch (error) {
+    console.error('Error saving or updating loan portfolio data:', error);
+    res.status(500).json({ message: 'Server error while saving or updating loan portfolio data.' });
+  }
+});" so that the payload data match with the new table structure "CREATE TABLE `loan_portfolio_dev` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `loan_id` varchar(20) DEFAULT NULL,
+  `customer_name` varchar(100) DEFAULT NULL,
+  `customer_contact` varchar(20) DEFAULT NULL,
+  `guarantor1_name` varchar(100) DEFAULT NULL,
+  `guarantor1_contact` varchar(20) DEFAULT NULL,
+  `guarantor2_name` varchar(100) DEFAULT NULL,
+  `guarantor2_contact` varchar(20) DEFAULT NULL,
+  `date_taken` date DEFAULT NULL,
+  `due_date` date DEFAULT NULL,
+  `loan_taken` decimal(15,2) DEFAULT NULL,
+  `principal_remaining` decimal(15,2) DEFAULT NULL,
+  `interest_remaining` decimal(15,2) DEFAULT NULL,
+  `total_remaining` decimal(15,2) DEFAULT NULL,
+  `total_inarrears` decimal(15,2) DEFAULT NULL,
+  `number_of_days_in_arrears` int DEFAULT NULL,
+  `loan_status` varchar(20) DEFAULT NULL,
+  `company_name` varchar(255) DEFAULT NULL,
+  `branch_name` varchar(255) DEFAULT NULL,
+  `user_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_unique_loan_company_branch` (`loan_id`,`company_name`,`branch_name`),
+   KEY `idx_loan_id` (`loan_id`),
+  KEY `idx_loan_status` (`loan_status`),
+  KEY `idx_due_date` (`due_date`)
+) ENGINE=InnoDB AUTO_INCREMENT=8989 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+ " ALL the actions of the above should be according to ""company_name" and 
+  "branch_name" and "
