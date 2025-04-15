@@ -537,3 +537,20 @@ ALTER TABLE `transactions_dev`
 COMMIT;
 
 
+CREATE TABLE `loan_paid_dev` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `customer_number` varchar(100) DEFAULT NULL,
+  `customer_name` varchar(100) DEFAULT NULL,
+  `customer_contact` varchar(20) DEFAULT NULL,
+  `amount_paid` decimal(15,2) DEFAULT NULL,
+  `outstanding_total_amount` decimal(15,2) DEFAULT NULL,
+  `trxn_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `reconciled` tinyint(1) DEFAULT '0',
+  `company_name` varchar(255) DEFAULT NULL,
+  `branch_name` varchar(255) DEFAULT NULL,
+  `user_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_customer_number` (`customer_number`),
+  KEY `idx_trxn_date` (`trxn_date`),
+  KEY `idx_reconciled` (`reconciled`)
+) ENGINE=InnoDB AUTO_INCREMENT=1894 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci

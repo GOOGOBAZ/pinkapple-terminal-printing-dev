@@ -69,3 +69,22 @@ app.post('/save-loan-portfolio', async (req, res) => {
 
  " ALL the actions of the above should be according to ""company_name" and 
   "branch_name" and "
+
+
+
+
+
+  INSERT INTO the_company_datails_dev (
+  the_company_name, 
+  the_company_branch, 
+  the_company_box_number, 
+  created_at, 
+  update_at
+)
+SELECT 
+  the_company_name, 
+  the_company_branch, 
+  the_company_box_number, 
+  created_at, 
+  update_at                    
+FROM the_company_datails;

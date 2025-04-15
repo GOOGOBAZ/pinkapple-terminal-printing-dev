@@ -128,6 +128,46 @@ Content-Type: application/json
   "amountSaved": 200000
 }
 
+###
+GET http://localhost:3000/get-all-savings-transaction_dev?company_name=SHILOH%20FINANCES%20LTD&branch_name=Bwaise%20Branch
+
+
+###
+GET http://localhost:3000/get-all-savings-transaction_dev?company_name=SHILOH%20FINANCES%20LTD&branch_name=Bwaise%20Branch
+
+###
+GET http://localhost:3000/get-all-savings-transaction-search_dev?term=NAKALIKA &page=1&pageSize=10&company_name=SHILOH%20FINANCES%20LTD&branch_name=Bwaise%20Branch
+
+
+###
+GET http://localhost:3000/search-savings-transaction_dev?term=NAM&company_name=SHILOH%20FINANCES%20LTD&branch_name=Bwaise%20Branch
+Content-Type: application/json
+
+
+
+
+###
+POST http://localhost:3000/create-saving_dev
+Content-Type: application/json
+
+{
+  "TrnId": "31154",
+  "amountSaved": 20000,
+  "company_name": "SHILOH FINANCES LTD",
+  "branch_name": "Bwaise Branch",
+  "user_id": 10003
+}
+
+
+### Create Saving Dev
+POST https://pinkapple-terminal-printing-de-e986dcfa78e5.herokuapp.com/create-saving_dev
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2NhbF91c2VyX2lkIjoxMDAwNywidGl0bGUiOiJEaXJlY3RvciIsInJvbGUiOiJJbnRlcm5lZSIsImNvbXBhbnlfbmFtZSI6IlNISUxPSCBGSU5BTkNFUyBMVEQiLCJicmFuY2hfbmFtZSI6IkJ3YWlzZSBCcmFuY2giLCJpYXQiOjE3NDQ3MTMwMjAsImV4cCI6MTc0NDc0MTgyMH0.0QjUd-n5Q04FovCoBzr8QtfAbfSVWTlHZFqK5WWTkZw
+Content-Type: application/json
+
+{
+  "TrnId": 31149,
+  "amountSaved": 20000
+}
 
 
 
@@ -144,6 +184,11 @@ Content-Type: application/json
 ### Get unreconciled savings
 GET http://localhost:3060/savings/unreconciled
 Content-Type: application/json
+
+
+###
+GET http://localhost:3000/savings/unreconciled_dev?company_name=EDU%20TRINITY%20INVESTMENT%20LIMITED&branch_name=Masanafu%20Branch
+
 
 
 ### Get unreconciled savings
@@ -172,6 +217,15 @@ Content-Type: application/json
 
 
 ### Reconcile savings records
+POST http://localhost:3000/savings/reconcile_dev
+Content-Type: application/json
+
+{
+  "id": [4668, 4669] 
+
+}
+
+### Reconcile savings records
 POST https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/savings/reconcile
 Content-Type: application/json
 
@@ -188,6 +242,11 @@ Content-Type: application/json
 
 
 ### Get all loan transactions
+GET http://localhost:3000/get-all-loan-transactions_dev?company_name=SHILOH%20FINANCES%20LTD&branch_name=Bwaise%20Branch
+Content-Type: application/json
+
+
+### Get all loan transactions
 GET https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/get-all-loan-transactions
 Content-Type: application/json
 
@@ -196,6 +255,9 @@ Content-Type: application/json
 ### Get loan transactions with search and pagination
 GET http://localhost:3060/get-all-loan-transactions-search?term=Puddy&page=1&pageSize=10
 Content-Type: application/json
+
+###
+GET http://localhost:3000/get-all-loan-transactions-search_dev?term=''&page=1&pageSize=10&company_name=?company_name=SHILOH%20FINANCES%20LTD&branch_name=Bwaise%20Branch
 
 ### Get loan transactions with search and pagination
 GET https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/get-all-loan-transactions-search?term=Puddy&page=1&pageSize=10
@@ -206,6 +268,8 @@ Content-Type: application/json
 GET http://localhost:3060/search-loan-transaction?term=Junda
 Content-Type: application/json
 
+###
+GET http://localhost:3000/search-loan-transaction_dev?term=john&company_name=SHILOH%20FINANCES%20LTD&branch_name=Bwaise%20Branch
 
 
 ### Search loan transactions
@@ -223,6 +287,31 @@ Content-Type: application/json
 }
 
 
+### Create Loan Payment Dev
+POST http://localhost:3000/create-loan-payment_dev
+Content-Type: application/json
+
+{
+  "id":"11603",
+  "amountPaid": 10000,
+  "company_name": "SHILOH FINANCES LTD",
+  "branch_name": "Bwaise Branch",
+  "user_id": 10001
+}
+
+
+
+### Example: create loan payment with JWT
+POST http://localhost:3000/create-loan-payment_dev
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2NhbF91c2VyX2lkIjoxMDAwNywidGl0bGUiOiJEaXJlY3RvciIsInJvbGUiOiJJbnRlcm5lZSIsImNvbXBhbnlfbmFtZSI6IlNISUxPSCBGSU5BTkNFUyBMVEQiLCJicmFuY2hfbmFtZSI6IkJ3YWlzZSBCcmFuY2giLCJpYXQiOjE3NDQ3MTMwMjAsImV4cCI6MTc0NDc0MTgyMH0.0QjUd-n5Q04FovCoBzr8QtfAbfSVWTlHZFqK5WWTkZw
+Content-Type: application/json
+
+{
+  "id": "11603",
+  "amountPaid": 5000
+}
+
+
 ### Create loan payment
 POST https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/create-loan-payment
 Content-Type: application/json
@@ -237,6 +326,10 @@ Content-Type: application/json
 GET http://localhost:3060/loans/unreconciled
 Content-Type: application/json
 
+### Get unreconciled loan payments
+GET http://localhost:3000/loans/unreconciled_dev?company_name=EDU%20TRINITY%20INVESTMENT%20LIMITED&branch_name=Masanafu%20Branch
+Content-Type: application/json
+
 
 ### Get unreconciled loan payments
 GET https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/loans/unreconciled
@@ -245,7 +338,7 @@ Content-Type: application/json
 
 
 ### Get all loan payments
-GET http://localhost:3060/loans/all
+GET http://localhost:3000/loans/all
 Content-Type: application/json
 
 
@@ -259,8 +352,18 @@ POST http://localhost:3060/loans/reconcile
 Content-Type: application/json
 
 {
-  "id": [1, 2, 3]  
+  "id": [1894]  
 }
+
+
+### Reconcile loan payments
+POST http://localhost:3000/loans/reconcile_dev
+Content-Type: application/json
+
+{
+  "id": [1894]  
+}
+
 
 
 ### Reconcile loan payments
@@ -285,10 +388,36 @@ Content-Type: application/json
 
 
 ### Login Request
-POST https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/login
+POST https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com:3000/login
 Content-Type: application/json
 
 {
   "user_id": "10000",  
   "p_word_login": "aa" 
+}
+
+
+### Login to /login_dev
+POST https://pinkapple-terminal-printing-de-e986dcfa78e5.herokuapp.com/login_dev
+Content-Type: application/json
+
+{
+  "local_user_id": 10007,
+  "password": "aa",
+  "unique_user_code": "23077870"
+}
+
+
+
+###
+POST http://localhost:3000/save-login-dev
+Content-Type: application/json
+
+{
+  "username": "TestUser",
+  "password_hash": "aaa",
+  "company_name": "TestCo",
+  "branch_name": "TestBranch",
+  "local_user_id": 12345
+  // Note: do NOT pass unique_user_code at all
 }

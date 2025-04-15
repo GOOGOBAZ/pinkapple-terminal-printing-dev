@@ -216,9 +216,7 @@ ALTER TABLE `log_in`
 
 COMMIT;
 
-
-
-CREATE TABLE `savings_history` (
+CREATE TABLE `savings_history_dev` (
   `id` int NOT NULL AUTO_INCREMENT,
   `TrnId` varchar(50) DEFAULT NULL,
   `TrnDate` datetime DEFAULT NULL,
@@ -227,28 +225,16 @@ CREATE TABLE `savings_history` (
   `SavingsPaid` decimal(15,2) DEFAULT NULL,
   `SavingsRunningBalance` decimal(15,2) DEFAULT NULL,
   `RECONCILED` tinyint(1) DEFAULT '0',
+  `company_name` varchar(255) DEFAULT NULL,
+  `branch_name` varchar(255) DEFAULT NULL,
+  `user_id` int NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `idx_TrnId` (`TrnId`),
   KEY `idx_AccountNumber` (`AccountNumber`),
   KEY `idx_TrnDate` (`TrnDate`),
   KEY `idx_RECONCILED` (`RECONCILED`)
-) ENGINE=InnoDB AUTO_INCREMENT=4661 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
-START TRANSACTION;
-
-ALTER TABLE `savings_history`
-  ADD COLUMN `company_name` VARCHAR(255) DEFAULT NULL AFTER `RECONCILED`,
-  ADD COLUMN `branch_name` VARCHAR(255) DEFAULT NULL AFTER `company_name`,
-  ADD COLUMN `user_id` INT NOT NULL AFTER `branch_name`;
-
--- Optional: Unique constraint
--- Be sure there aren’t duplicates of (TrnId, company_name, branch_name).
-ALTER TABLE `savings_history`
-  ADD UNIQUE KEY `idx_unique_trnid_company_branch` (`TrnId`, `company_name`, `branch_name`);
-
-COMMIT;
+) ENGINE=InnoDB AUTO_INCREMENT=4663 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE `savings_paid` (
@@ -558,3 +544,39 @@ SELECT
 FROM transactions
 GROUP BY AccountNumber, AccountName
 HAVING COUNT(*) > 1;
+
+
+
+CREATE TABLE `log_in_dev` (
+  `user_id`              BIGINT NOT NULL AUTO_INCREMENT,
+  `username`             VARCHAR(60) NOT NULL,
+  `password_hash`        VARCHAR(255) NOT NULL,
+  -- Optional: store a refresh token if you're using "Refresh Token" flows
+  `refresh_token`        VARCHAR(255) DEFAULT NULL,
+  `refresh_expires_at`   DATETIME DEFAULT NULL,
+  
+  -- Keep your existing columns if they’re relevant, renamed or re-purposed as needed:
+  `account_number`       VARCHAR(30)  DEFAULT NULL,
+  `account_name`         VARCHAR(30)  DEFAULT NULL,
+  `title`                VARCHAR(45)  DEFAULT NULL,
+  `first_name`           VARCHAR(60)  DEFAULT NULL,
+  `last_name`            VARCHAR(60)  DEFAULT NULL,
+  `birth_date`           DATE         DEFAULT NULL,
+  `recruitement_date`    DATE         DEFAULT NULL,
+  `line_manager`         VARCHAR(60)  DEFAULT NULL,
+  `former_employment`    VARCHAR(60)  DEFAULT NULL,
+  `role`                 VARCHAR(30)  DEFAULT NULL,
+  
+  -- Time when user record is created (set default to auto-generate)
+  `creation_time`        TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  -- Timestamps to track login or JWT usage
+  `last_login`           DATETIME     DEFAULT NULL,
+  `last_token_issued_at` DATETIME     DEFAULT NULL,
+  
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `username_UNIQUE` (`username`)
+) 
+ENGINE=InnoDB
+AUTO_INCREMENT=10004
+DEFAULT CHARSET=utf8mb3;
