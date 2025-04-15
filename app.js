@@ -458,7 +458,7 @@ app.post('/create-saving_dev', authenticateJWT, async (req, res) => {
   const { TrnId, amountSaved } = req.body;
 
   // 2) Extract the fields from the JWT-decoded data in `req.user`
-  const { company_name, branch_name, user_id } = req.user;
+  const { company_name, branch_name, local_user_id } = req.user;
 
   // 3) Validate input
   if (!TrnId || !amountSaved || amountSaved <= 0) {
@@ -528,7 +528,7 @@ app.post('/create-saving_dev', authenticateJWT, async (req, res) => {
       updatedBalance,
       company_name,
       branch_name,
-      user_id
+      local_user_id
     ]);
 
     // 8) Commit the transaction
