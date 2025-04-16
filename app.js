@@ -332,7 +332,7 @@ app.get('/get-all-savings-transaction-search_dev', async (req, res) => {
 
 app.get('/search-savings-transaction_dev', async (req, res) => {
   const { company_name, branch_name } = req.query;
-
+  console.log("Received request at /search-savings-transaction");
   if (!company_name || !branch_name) {
     return res.status(400).json({ message: 'Company name and branch name are required.' });
   }

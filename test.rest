@@ -140,7 +140,7 @@ GET https://pinkapple-terminal-printing-de-e986dcfa78e5.herokuapp.com/get-all-sa
 
 
 ###
-GET https://pinkapple-terminal-printing-de-e986dcfa78e5.herokuapp.com/search-savings-transaction_dev?term=NAM&company_name=SHILOH%20FINANCES%20LTD&branch_name=Bwaise%20Branch
+GET https://pinkapple-terminal-printing-de-e986dcfa78e5.herokuapp.com/search-savings-transaction_dev?term=NAMU&company_name=SHILOH%20FINANCES%20LTD&branch_name=Bwaise%20Branch
 Content-Type: application/json
 
 
