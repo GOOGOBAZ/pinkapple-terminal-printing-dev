@@ -129,18 +129,18 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3000/get-all-savings-transaction_dev?company_name=SHILOH%20FINANCES%20LTD&branch_name=Bwaise%20Branch
+GET https://pinkapple-terminal-printing-de-e986dcfa78e5.herokuapp.com/get-all-savings-transaction_dev?company_name=SHILOH%20FINANCES%20LTD&branch_name=Bwaise%20Branch
 
 
 ###
 GET http://localhost:3000/get-all-savings-transaction_dev?company_name=SHILOH%20FINANCES%20LTD&branch_name=Bwaise%20Branch
 
 ###
-GET http://localhost:3000/get-all-savings-transaction-search_dev?term=NAKALIKA &page=1&pageSize=10&company_name=SHILOH%20FINANCES%20LTD&branch_name=Bwaise%20Branch
+GET https://pinkapple-terminal-printing-de-e986dcfa78e5.herokuapp.com/get-all-savings-transaction-search_dev?term=john &page=1&pageSize=10&company_name=SHILOH%20FINANCES%20LTD&branch_name=Bwaise%20Branch
 
 
 ###
-GET http://localhost:3000/search-savings-transaction_dev?term=NAM&company_name=SHILOH%20FINANCES%20LTD&branch_name=Bwaise%20Branch
+GET https://pinkapple-terminal-printing-de-e986dcfa78e5.herokuapp.com/search-savings-transaction_dev?term=NAM&company_name=SHILOH%20FINANCES%20LTD&branch_name=Bwaise%20Branch
 Content-Type: application/json
 
 
@@ -171,14 +171,6 @@ Content-Type: application/json
 
 
 
-### Create Saving Transaction
-POST https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/create-saving
-Content-Type: application/json
-
-{
-  "TrnId": "8617",
-  "amountSaved": 200000
-}
 
 
 ### Get unreconciled savings
@@ -187,7 +179,7 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:3000/savings/unreconciled_dev?company_name=EDU%20TRINITY%20INVESTMENT%20LIMITED&branch_name=Masanafu%20Branch
+GET https://pinkapple-terminal-printing-de-e986dcfa78e5.herokuapp.com/savings/unreconciled_dev?company_name=EDU%20TRINITY%20INVESTMENT%20LIMITED&branch_name=Masanafu%20Branch
 
 
 
@@ -217,7 +209,7 @@ Content-Type: application/json
 
 
 ### Reconcile savings records
-POST http://localhost:3000/savings/reconcile_dev
+POST https://pinkapple-terminal-printing-de-e986dcfa78e5.herokuapp.com/savings/reconcile_dev
 Content-Type: application/json
 
 {
@@ -242,7 +234,7 @@ Content-Type: application/json
 
 
 ### Get all loan transactions
-GET http://localhost:3000/get-all-loan-transactions_dev?company_name=SHILOH%20FINANCES%20LTD&branch_name=Bwaise%20Branch
+GET https://pinkapple-terminal-printing-de-e986dcfa78e5.herokuapp.com/get-all-loan-transactions_dev?company_name=SHILOH%20FINANCES%20LTD&branch_name=Bwaise%20Branch
 Content-Type: application/json
 
 

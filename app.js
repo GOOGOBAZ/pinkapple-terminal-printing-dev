@@ -365,93 +365,6 @@ app.get('/search-savings-transaction_dev', async (req, res) => {
 });
 
 
-// app.post('/create-saving_dev', async (req, res) => {
-//   const { TrnId, amountSaved, company_name, branch_name, user_id } = req.body;
-
-//   if (!TrnId || !amountSaved || amountSaved <= 0 || !company_name || !branch_name || !user_id) {
-//     return res.status(400).json({ message: 'Invalid input parameters.' });
-//   }
-
-//   const connection = await connect.getConnection();
-
-//   try {
-//     await connection.beginTransaction();
-
-//     // Fetch company details based on body parameters
-//     const companyDetailsQuery = `
-//       SELECT the_company_name, the_company_branch, the_company_box_number
-//       FROM the_company_datails_dev
-//       WHERE company_name = ? AND branch_name = ?
-//     `;
-//     const [companyDetails] = await connection.query(companyDetailsQuery, [company_name, branch_name]);
-
-//     if (companyDetails.length === 0) {
-//       await connection.rollback();
-//       return res.status(404).json({ message: 'Company details not found.' });
-//     }
-
-//     const updateBalanceQuery = `
-//       UPDATE transactions_dev
-//       SET SavingsRunningBalance = SavingsRunningBalance + ?
-//       WHERE TrnId = ?
-//     `;
-//     await connection.query(updateBalanceQuery, [amountSaved, TrnId]);
-
-//     const getUpdatedBalanceQuery = `
-//       SELECT SavingsRunningBalance, AccountNumber, AccountName
-//       FROM transactions_dev
-//       WHERE TrnId = ?
-//     `;
-//     const [rows] = await connection.query(getUpdatedBalanceQuery, [TrnId]);
-
-//     if (rows.length === 0) {
-//       await connection.rollback();
-//       return res.status(404).json({ message: 'Transaction ID not found.' });
-//     }
-
-//     const updatedBalance = rows[0].SavingsRunningBalance;
-//     const accountNumber = rows[0].AccountNumber;
-//     const accountName = rows[0].AccountName;
-
-//     const insertHistoryQuery = `
-//       INSERT INTO savings_history_dev (
-//         TrnId, TrnDate, AccountNumber, AccountName, SavingsPaid, SavingsRunningBalance, RECONCILED, company_name, branch_name, user_id, created_at
-//       ) VALUES (?, NOW(), ?, ?, ?, ?, FALSE, ?, ?, ?, UTC_TIMESTAMP())
-//     `;
-//     await connection.query(insertHistoryQuery, [
-//       TrnId, accountNumber, accountName, amountSaved, updatedBalance, company_name, branch_name, user_id
-//     ]);
-
-//     await connection.commit();
-
-//     // Prepare receipt data including company and transaction details
-//     const receiptData = {
-//       theCompanyName: companyDetails[0].the_company_name,
-//       theCompanyBranch: companyDetails[0].the_company_branch,
-//       theCompanyBoxNumber: companyDetails[0].the_company_box_number,
-//       AccountName: accountName,
-//       SavingsPaid: amountSaved,
-//       SavingsRunningBalance: updatedBalance,
-//       Date: new Date().toISOString()
-//     };
-
-//     // Return the receipt data as the response
-//     res.status(200).json({
-//       message: 'Savings updated successfully.',
-//       receiptData: receiptData
-//     });
-//   } catch (error) {
-//     await connection.rollback();
-//     console.error('Error updating savings:', error);
-//     res.status(500).json({ message: 'Server error while updating savings.' });
-//   } finally {
-//     connection.release();
-//   }
-// });
-
-// Example import of your JWT middleware and DB connection
-// const { authenticateJWT } = require('./jwtMiddleware');
-// const connect = require('./db');  // or wherever you export connect.getConnection()
 
 app.post('/create-saving_dev', authenticateJWT, async (req, res) => {
   // 1) Extract the fields from the body that you still need
@@ -919,177 +832,6 @@ module.exports = {
 
 
 
-// app.post('/create-loan-payment_dev', async (req, res) => {
-//   const {
-//     id,
-//     amountPaid,
-//     company_name,
-//     branch_name,
-//     user_id
-//   } = req.body;
-
-//   // Validate the required fields
-//   if (
-//     !id ||
-//     !amountPaid ||
-//     amountPaid <= 0 ||
-//     !company_name ||
-//     !branch_name ||
-//     !user_id
-//   ) {
-//     return res.status(400).json({
-//       message: 'Please provide a valid id, amountPaid (>0), company_name, branch_name, and user_id.'
-//     });
-//   }
-
-//   let connection;
-//   try {
-//     // 1) Get a connection and start a transaction
-//     connection = await connect.getConnection();
-//     await connection.beginTransaction();
-
-//     // 2) Fetch company details by company_name and branch_name
-//     const companyDetailsQuery = `
-//       SELECT the_company_name,
-//              the_company_branch,
-//              the_company_box_number
-//       FROM the_company_datails_dev
-//       WHERE the_company_name = ?
-//         AND the_company_branch = ?
-//       LIMIT 1
-//     `;
-//     const [companyDetails] = await connection.query(companyDetailsQuery, [
-//       company_name,
-//       branch_name
-//     ]);
-
-//     if (companyDetails.length === 0) {
-//       await connection.rollback();
-//       return res.status(404).json({
-//         message: 'Company details not found for the specified name and branch.'
-//       });
-//     }
-
-//     // 3) Fetch the current loan balance from loan_portfolio_dev by ID, company, and branch
-//     const getLoanBalanceQuery = `
-//       SELECT id,
-//              loan_id,  -- still stored if needed for the receipt
-//              total_remaining,
-//              customer_name,
-//              customer_contact
-//       FROM loan_portfolio_dev
-//       WHERE id = ?
-//         AND company_name = ?
-//         AND branch_name  = ?
-//       LIMIT 1
-//     `;
-//     const [loanRows] = await connection.query(getLoanBalanceQuery, [
-//       id,
-//       company_name,
-//       branch_name
-//     ]);
-
-//     if (loanRows.length === 0) {
-//       await connection.rollback();
-//       return res.status(404).json({
-//         message: 'No matching loan record found for the given ID, company, and branch.'
-//       });
-//     }
-
-//     const currentBalance = parseFloat(loanRows[0].total_remaining) || 0;
-//     const updatedBalance = currentBalance - amountPaid;
-
-//     // 3a) Prevent paying more than the outstanding balance
-//     if (amountPaid > currentBalance) {
-//       await connection.rollback();
-//       return res.status(400).json({
-//         message: 'Amount paid cannot exceed the outstanding balance.'
-//       });
-//     }
-
-//     const customerName    = loanRows[0].customer_name;
-//     const customerContact = loanRows[0].customer_contact;
-//     const loanId          = loanRows[0].loan_id; // If you still need it for your receipt
-
-//     // 4) Update the remaining balance in loan_portfolio_dev
-//     const updateLoanBalanceQuery = `
-//       UPDATE loan_portfolio_dev
-//       SET total_remaining = ?
-//       WHERE id = ?
-//         AND company_name = ?
-//         AND branch_name = ?
-//     `;
-//     await connection.query(updateLoanBalanceQuery, [
-//       updatedBalance,
-//       id,
-//       company_name,
-//       branch_name
-//     ]);
-
-//     // 5) Insert payment details into loan_paid_dev
-//     const insertPaymentHistoryQuery = `
-//       INSERT INTO loan_paid_dev (
-//         customer_number,
-//         customer_name,
-//         customer_contact,
-//         amount_paid,
-//         outstanding_total_amount,
-//         trxn_date,
-//         Reconciled,
-//         user_id,
-//         company_name,
-//         branch_name
-//       )
-//       VALUES (?, ?, ?, ?, ?, NOW(), 0, ?, ?, ?)
-//     `;
-//     await connection.query(insertPaymentHistoryQuery, [
-//       // Decide what you want stored as 'customer_number'—the textual loan_id or numeric id.
-//       loanId || id,
-//       customerName,
-//       customerContact,
-//       amountPaid,
-//       updatedBalance,
-//       user_id,
-//       company_name,
-//       branch_name
-//     ]);
-
-//     // 6) Commit the transaction
-//     await connection.commit();
-
-//     // 7) Prepare the receipt data
-//     const receiptData = {
-//       theCompanyName:      companyDetails[0].the_company_name,
-//       theCompanyBranch:    companyDetails[0].the_company_branch,
-//       theCompanyBoxNumber: companyDetails[0].the_company_box_number,
-//       loanId:              loanId || `ID: ${id}`,
-//       customerName:        customerName,
-//       amountPaid:          amountPaid,
-//       outstandingTotalAmount: updatedBalance,
-//       date:                new Date().toISOString()
-//     };
-
-//     // 8) Return success response and receipt data
-//     return res.status(200).json({
-//       message: 'Loan payment recorded successfully.',
-//       receiptData: receiptData
-//     });
-//   } catch (error) {
-//     // Roll back and return error on any failure
-//     if (connection) {
-//       await connection.rollback();
-//     }
-//     console.error('Error recording loan payment:', error);
-//     return res.status(500).json({
-//       message: 'Server error while recording loan payment.'
-//     });
-//   } finally {
-//     // Release connection
-//     if (connection) {
-//       connection.release();
-//     }
-//   }
-// });
 
 
 // At the top of your file, import the middleware
@@ -1763,6 +1505,31 @@ app.post('/login_dev', async (req, res) => {
     connection.release();
   }
 });
+
+
+
+// Socket.io setup
+io.on('connection', (socket) => {
+  console.log('A new client connected via WebSocket');
+
+  // Client disconnect event
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+  });
+
+  // The WebSocket client listens to 'searchResults' event
+  socket.on('search', (searchTerm) => {
+    // Trigger a search on receiving a search term (if needed)
+    console.log(`WebSocket search initiated with term: ${searchTerm}`);
+    // Alternatively, you could call the same `selectQuery` here if you want 
+    // WebSocket to independently fetch results instead of relying on the HTTP request.
+  });
+});
+
+
+
+
+ 
 
 // Start the server
 
