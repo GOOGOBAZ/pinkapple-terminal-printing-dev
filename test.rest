@@ -396,7 +396,7 @@ Content-Type: application/json
 {
   "local_user_id": 10007,
   "password": "aa",
-  "unique_user_code": "76860498"
+  "unique_user_code": "86534883"
 }
 
 

@@ -1426,11 +1426,10 @@ async function generateUniqueCodeInDB(connection, length = 4) {
  */
 app.post('/save-login-dev', async (req, res) => {
   const connection = await connect.getConnection();
-
   try {
     await connection.beginTransaction();
 
-    // 1. Destructure body
+    /* 1. Grab body fields (same as before) */
     const {
       username,
       password_hash,
@@ -1446,16 +1445,31 @@ app.post('/save-login-dev', async (req, res) => {
       former_employment,
       role,
       creation_time,
-      unique_user_code   // may be blank
+      unique_user_code    // <‑‑ ignore this if the row already exists
     } = req.body;
 
-    // 2. Generate a new code ONLY if none supplied
-    let finalUniqueCode = unique_user_code;
-    if (!finalUniqueCode) {
-      finalUniqueCode = await generateUniqueCodeInDB(connection, 8);
+    /* 2. Check if the record already exists */
+    const [existing] = await connection.query(
+      `SELECT unique_user_code
+         FROM log_in_dev
+        WHERE company_name  = ?
+          AND branch_name   = ?
+          AND local_user_id = ?
+        LIMIT 1`,
+      [company_name, branch_name, local_user_id]
+    );
+
+    let finalUniqueCode;
+    if (existing.length) {
+      // Row exists – keep its current code
+      finalUniqueCode = existing[0].unique_user_code;
+    } else {
+      // Row doesn’t exist – use supplied code or make a new one
+      finalUniqueCode = unique_user_code || await generateUniqueCodeInDB(connection, 8);
     }
 
-    // 3. Upsert without touching unique_user_code on conflicts
+    /* 3. Upsert – we still pass finalUniqueCode, but it’s now guaranteed
+          to equal the existing value when the record already exists */
     const sql = `
       INSERT INTO log_in_dev (
         username, password_hash, company_name, branch_name, local_user_id,
@@ -1475,7 +1489,7 @@ app.post('/save-login-dev', async (req, res) => {
         former_employment = VALUES(former_employment),
         role              = VALUES(role),
         creation_time     = VALUES(creation_time)
-        -- ⬆⬆  unique_user_code intentionally NOT listed
+        /* unique_user_code NOT touched */
     `;
 
     await connection.query(sql, [
@@ -1493,30 +1507,15 @@ app.post('/save-login-dev', async (req, res) => {
       former_employment || null,
       role || null,
       creation_time || null,
-      finalUniqueCode          // used only on true inserts
+      finalUniqueCode
     ]);
 
-    // 4. Fetch the fresh row
-    const [rows] = await connection.query(
-      `SELECT *
-         FROM log_in_dev
-        WHERE company_name  = ?
-          AND branch_name   = ?
-          AND local_user_id = ?
-        LIMIT 1`,
-      [company_name, branch_name, local_user_id]
-    );
-
     await connection.commit();
-
-    res.status(200).json({
-      message: 'User record inserted/updated successfully.',
-      data: rows[0] || {}
-    });
+    res.status(200).json({ message: 'Saved.', unique_user_code: finalUniqueCode });
   } catch (err) {
     await connection.rollback();
-    console.error('Error saving user record:', err);
-    res.status(500).json({ message: 'Server error while saving user record.' });
+    console.error('save-login-dev:', err);
+    res.status(500).json({ message: 'Server error.' });
   } finally {
     connection.release();
   }
