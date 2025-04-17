@@ -39,8 +39,10 @@
 <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
 <script>
   // Initialize WebSocket connection
-  const socket = io('ws://https://pinkapple-terminal-printing-de-e986dcfa78e5.herokuapp.com'); // Replace with your server's URL if different
 
+// Option B: Secure WebSocket explicitly
+// (only needed if the standard HTTPS approach isn't working)
+const socket = io('wss://pinkapple-terminal-printing-de-e986dcfa78e5.herokuapp.com');
   // Reference to the suggestions list element
   const suggestionsList = document.getElementById('suggestionsList');
 
