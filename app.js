@@ -1433,7 +1433,7 @@ async function generateUniqueCodeInDB(connection, length = 4) {
  */
 app.post('/save-login-dev', async (req, res) => {
   const connection = await connect.getConnection();
-
+console.log('Received request at /save-login-dev');
   try {
     await connection.beginTransaction();
 
