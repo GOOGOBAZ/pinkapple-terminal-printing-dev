@@ -846,6 +846,8 @@ app.post('/create-loan-payment_dev', authenticateJWT, async (req, res) => {
   // 2) Extract the company/branch/user from the JWT payload (set in the middleware)
   const { local_user_id, company_name, branch_name } = req.user;
 
+  console.log("Received request at /create-loan-payment_dev");
+console.log(req.user);
   // Validate the required fields
   if (!id || !amountPaid || amountPaid <= 0) {
     return res.status(400).json({
