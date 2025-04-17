@@ -842,7 +842,7 @@ app.post('/create-loan-payment_dev', authenticateJWT, async (req, res) => {
   // 1) Now you only need to read from the body what’s NOT in the JWT:
   //    e.g. the `id` of the loan, the `amountPaid`, etc.
   const { id, amountPaid } = req.body;
-
+console.log(req.body);
   // 2) Extract the company/branch/user from the JWT payload (set in the middleware)
   const { local_user_id, company_name, branch_name } = req.user;
 
