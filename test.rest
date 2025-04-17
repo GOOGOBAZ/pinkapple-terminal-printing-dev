@@ -295,7 +295,7 @@ Content-Type: application/json
 
 ### Example: create loan payment with JWT
 POST  https://pinkapple-terminal-printing-de-e986dcfa78e5.herokuapp.com/create-loan-payment_dev
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2NhbF91c2VyX2lkIjoxMDAwNywidGl0bGUiOiJEaXJlY3RvciIsInJvbGUiOiJJbnRlcm5lZSIsImNvbXBhbnlfbmFtZSI6IlNISUxPSCBGSU5BTkNFUyBMVEQiLCJicmFuY2hfbmFtZSI6IkJ3YWlzZSBCcmFuY2giLCJpYXQiOjE3NDQ3NDM3NjQsImV4cCI6MTc0NDc3MjU2NH0.3IiBdCeMSmlhBjLr3dKdfx6E6nLjuQozoN8qpEmyjDY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2NhbF91c2VyX2lkIjoxMDAwNywidGl0bGUiOiJEaXJlY3RvciIsInJvbGUiOiJJbnRlcm5lZSIsImNvbXBhbnlfbmFtZSI6IlNISUxPSCBGSU5BTkNFUyBMVEQiLCJicmFuY2hfbmFtZSI6IkJ3YWlzZSBCcmFuY2giLCJpYXQiOjE3NDQ5MDQyOTcsImV4cCI6MTc0NDkzMzA5N30.Mos6FKw8leW_QMFdIE_zQD7kQShj4yOr21M_JQ7KR9s
 Content-Type: application/json
 
 {
@@ -396,7 +396,7 @@ Content-Type: application/json
 {
   "local_user_id": 10007,
   "password": "aa",
-  "unique_user_code": "23077870"
+  "unique_user_code": "76860498"
 }
 
 
