@@ -390,7 +390,7 @@ Content-Type: application/json
 
 
 ### Login to /login_dev
-POST https://pinkapple-terminal-printing-de-e986dcfa78e5.herokuapp.com/login_dev
+POST https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/login
 Content-Type: application/json
 
 {
