@@ -1662,6 +1662,91 @@ app.post('/login_dev', async (req, res) => {
 
 
 
+/**
+ * GET /users
+ * ----------
+ * Retrieve user records from log_in_dev.
+ *
+ * Optional query‑string filters:
+ *   • user_id
+ *   • username
+ *   • local_user_id
+ *   • unique_user_code
+ *   • company_name
+ *   • branch_name
+ *   • role
+ *
+ * If no filters are supplied the route returns every row
+ * (you can forbid that by checking `if (!hasFilters) …`).
+ */
+
+
+
+app.get('/users', async (req, res) => {
+  const {
+    user_id,
+    username,
+    local_user_id,
+    unique_user_code,
+    company_name,
+    branch_name,
+    role
+  } = req.query;
+
+  // Build WHERE clause dynamically
+  const conditions = [];
+  const params     = [];
+
+  if (user_id)           { conditions.push('user_id         = ?'); params.push(user_id); }
+  if (username)          { conditions.push('username        = ?'); params.push(username); }
+  if (local_user_id)     { conditions.push('local_user_id   = ?'); params.push(local_user_id); }
+  if (unique_user_code)  { conditions.push('unique_user_code = ?'); params.push(unique_user_code); }
+  if (company_name)      { conditions.push('company_name    = ?'); params.push(company_name); }
+  if (branch_name)       { conditions.push('branch_name     = ?'); params.push(branch_name); }
+  if (role)              { conditions.push('role            = ?'); params.push(role); }
+
+  // Optional safety: require at least one filter
+  // if (conditions.length === 0) {
+  //   return res.status(400).json({ message: 'At least one filter is required.' });
+  // }
+
+  let sql = `
+    SELECT
+      user_id,
+      username,
+      title,
+      first_name,
+      last_name,
+      role,
+      company_name,
+      branch_name,
+      local_user_id,
+      unique_user_code,
+      last_login
+    FROM log_in_dev
+  `;
+  if (conditions.length) {
+    sql += 'WHERE ' + conditions.join(' AND ');
+  }
+
+  const connection = await connect.getConnection();
+  try {
+    await connection.beginTransaction();
+
+    const [rows] = await connection.query(sql, params);
+
+    await connection.commit();
+    res.status(200).json({ count: rows.length, data: rows });
+  } catch (err) {
+    await connection.rollback();
+    console.error('Error fetching users:', err);
+    res.status(500).json({ message: 'Server error while fetching users.' });
+  } finally {
+    connection.release();
+  }
+});
+
+
 // Socket.io setup
 io.on('connection', (socket) => {
   console.log('A new client connected via WebSocket');
