@@ -402,14 +402,30 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:3000/save-login-dev
+POST http://localhost:3000/save-login
 Content-Type: application/json
 
 {
   "username": "TestUser",
   "password_hash": "aaa",
-  "company_name": "TestCo",
-  "branch_name": "TestBranch",
-  "local_user_id": 12345
+   "company_name": "SHILOH FINANCES LTD",
+  "branch_name": "Bwaise Branch",
+  "local_user_id": 10001
   // Note: do NOT pass unique_user_code at all
+}
+
+
+
+
+### Update the existing company record (same company_name / branch_name / user_id)
+POST http://localhost:3000/save-company
+Content-Type: application/json
+
+{
+  "the_company_name": "Edad Coin SMS-Ltd (UPDATED)",
+  "the_company_branch": "Edad Coin SMS-Ltd (UPDATED)",
+  "the_company_box_number": "P.O. Box 456",
+  "company_name": "SHILOH FINANCES LTD",
+  "branch_name": "Bwaise Branch",
+  "user_id": 10001
 }
