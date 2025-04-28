@@ -160,13 +160,13 @@ Content-Type: application/json
 
 
 ### Create Saving Dev
-POST https://pinkapple-terminal-printing-de-e986dcfa78e5.herokuapp.com/create-saving_dev
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2NhbF91c2VyX2lkIjoxMDAwNywidGl0bGUiOiJEaXJlY3RvciIsInJvbGUiOiJJbnRlcm5lZSIsImNvbXBhbnlfbmFtZSI6IlNISUxPSCBGSU5BTkNFUyBMVEQiLCJicmFuY2hfbmFtZSI6IkJ3YWlzZSBCcmFuY2giLCJpYXQiOjE3NDQ3NDM3NjQsImV4cCI6MTc0NDc3MjU2NH0.3IiBdCeMSmlhBjLr3dKdfx6E6nLjuQozoN8qpEmyjDY
+POST https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/create-saving
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2NhbF91c2VyX2lkIjoxMDAxMCwidGl0bGUiOiJMb2FucyBPZmZpY2VyIiwicm9sZSI6IkludGVybmVlIiwiY29tcGFueV9uYW1lIjoiREFSQ1kgRklOQU5DRSIsImJyYW5jaF9uYW1lIjoiS2FmdW1iZSIsImlhdCI6MTc0NTU1MTQ2NywiZXhwIjoxNzQ1NTgwMjY3fQ.ANrSvIA0r6SPXmelyESM27oNzaeLWNALg8qrIsZ2sc0
 Content-Type: application/json
 
 {
-  "TrnId": 31149,
-  "amountSaved": 20000
+  "TrnId": 39790,
+  "amountSaved": 30000
 }
 
 
@@ -234,7 +234,7 @@ Content-Type: application/json
 
 
 ### Get all loan transactions
-GET https://pinkapple-terminal-printing-de-e986dcfa78e5.herokuapp.com/get-all-loan-transactions_dev?company_name=SHILOH%20FINANCES%20LTD&branch_name=Bwaise%20Branch
+GET https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/get-all-loan-transactions?company_name=DARCY%20FINANCE&branch_name=Kafumbe
 Content-Type: application/json
 
 
@@ -294,12 +294,12 @@ Content-Type: application/json
 
 
 ### Example: create loan payment with JWT
-POST  https://pinkapple-terminal-printing-de-e986dcfa78e5.herokuapp.com/create-loan-payment_dev
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2NhbF91c2VyX2lkIjoxMDAwNywidGl0bGUiOiJEaXJlY3RvciIsInJvbGUiOiJJbnRlcm5lZSIsImNvbXBhbnlfbmFtZSI6IlNISUxPSCBGSU5BTkNFUyBMVEQiLCJicmFuY2hfbmFtZSI6IkJ3YWlzZSBCcmFuY2giLCJpYXQiOjE3NDQ5MDQyOTcsImV4cCI6MTc0NDkzMzA5N30.Mos6FKw8leW_QMFdIE_zQD7kQShj4yOr21M_JQ7KR9s
+POST  https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/create-loan-payment
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2NhbF91c2VyX2lkIjoxMDAxMCwidGl0bGUiOiJMb2FucyBPZmZpY2VyIiwicm9sZSI6IkludGVybmVlIiwiY29tcGFueV9uYW1lIjoiREFSQ1kgRklOQU5DRSIsImJyYW5jaF9uYW1lIjoiS2FmdW1iZSIsImlhdCI6MTc0NTU1MTQ2NywiZXhwIjoxNzQ1NTgwMjY3fQ.ANrSvIA0r6SPXmelyESM27oNzaeLWNALg8qrIsZ2sc0
 Content-Type: application/json
 
 {
-  "id": "11603",
+  "id": "12639",
   "amountPaid": 5000
 }
 
@@ -394,9 +394,9 @@ POST https://pinkapple-reports-printing-8964e6404c0e.herokuapp.com/login
 Content-Type: application/json
 
 {
-  "local_user_id": 10007,
+  "local_user_id": 10010,
   "password": "aa",
-  "unique_user_code": "37537448"
+  "unique_user_code": "1103"
 }
 
 
